@@ -1,5 +1,5 @@
 module Hal
   class Handler < Wheaties::Handler
-    include Hal::Responses::Privmsg
+    include Hal::Responses::Messages
   end
 end

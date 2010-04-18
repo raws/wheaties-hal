@@ -2,7 +2,7 @@ $:.unshift(File.join(__FILE__, "../lib"))
 
 require "httparty"
 
-require "hal/responses/privmsg"
+require "hal/responses/messages"
 
 require "hal/boot"
 require "hal/handler"
