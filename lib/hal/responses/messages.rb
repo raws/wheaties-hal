@@ -14,6 +14,7 @@ module Hal
         def reply?
           reply = !response.pm?
           reply = reply && response.text =~ /#{connection.nick}/i
+          reply = reply && response.text !~ /^[!\.]/
           
           if Hal.config["replies"] && Hal.config["replies"]["only"]
             reply = reply && Hal.config["replies"]["only"].find do |nick|
@@ -33,6 +34,7 @@ module Hal
         def learn?
           learn = !response.pm?
           learn = learn && response.sender.nick != connection.nick
+          learn = learn && response.text !~ /^[!\.]/
           
           if Hal.config["learns"] && Hal.config["learns"]["only"]
             learn = learn && Hal.config["learns"]["only"].find do |nick|
