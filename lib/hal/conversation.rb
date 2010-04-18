@@ -3,7 +3,7 @@ module Hal
     include Comparable
     include Wheaties::Concerns::Messaging
     
-    CHANCE_CONVO_CONTINUES = { 0..2.5 => 1, 2.5..4 => 0.5, 4..5 => 0.25 }
+    CHANCE_CONVO_CONTINUES = { 0..2.5 => 1, 2.5..4 => 0.75, 4..6 => 0.33, 6..10 => 0.15 }
     
     attr_reader :channel, :nick, :messages
     
