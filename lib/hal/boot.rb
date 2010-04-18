@@ -11,4 +11,6 @@ module Hal
       Hal.config = YAML.load_file(brain_config_path) || {}
     end
   end
+  
+  self.start
 end
