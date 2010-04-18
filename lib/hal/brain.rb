@@ -18,6 +18,10 @@ module Hal
       self.class.put("/#{name}.txt", :body => { :text => text })
     end
     
+    def delete!
+      self.class.delete("/#{name}.txt")
+    end
+    
     class << self
       def speak
         new(Hal.config["brain"]).speak

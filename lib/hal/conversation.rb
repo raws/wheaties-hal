@@ -3,8 +3,7 @@ module Hal
     include Comparable
     include Wheaties::Concerns::Messaging
     
-    SECONDS_UNTIL_CONVO_OVER = 5
-    CHANCE_CONVO_CONTINUES = 0.75
+    CHANCE_CONVO_CONTINUES = { 0..2.5 => 1, 2.5..4 => 0.5, 4..5 => 0.25 }
     
     attr_reader :channel, :nick, :messages
     
@@ -19,28 +18,24 @@ module Hal
     end
     
     def old?
-      !messages.empty? && (Time.now - messages.last.time > SECONDS_UNTIL_CONVO_OVER)
-    end
-    
-    def age
-      messages.last.time - messages[-2].time if messages.size >= 2
+      !messages.empty? && (Time.now - messages.last.time > CHANCE_CONVO_CONTINUES.keys.last.end)
     end
     
     def continue?
-      rand <= CHANCE_CONVO_CONTINUES
+      if messages.size >= 2
+        age = messages.last.time - messages[-2].time
+        rand < (CHANCE_CONVO_CONTINUES.find_in_range(age) || 0)
+      else
+        false
+      end
     end
     
     def converse!
       return if messages.empty?
       
-      if messages.last.text =~ /#{Wheaties::Connection.nick}/i ||
-         (messages.size >= 2 && age < SECONDS_UNTIL_CONVO_OVER && continue?)
+      if messages.last.text =~ /#{Wheaties::Connection.nick}/i || continue?
         privmsg(Brain.speak, channel)
       end
-    end
-    
-    def delete!
-      Conversation.all.delete(self)
     end
     
     def <=>(other)
