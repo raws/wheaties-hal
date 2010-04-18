@@ -18,15 +18,6 @@ module Hal
       self.class.put("/#{name}.txt", :body => { :text => text })
     end
     
-    def feed(text)
-      if text =~ /#{connection.nick}/i
-        speak
-      else
-        learn(text)
-        nil
-      end
-    end
-    
     class << self
       def speak
         new(Hal.config["brain"]).speak
@@ -34,10 +25,6 @@ module Hal
       
       def learn(text)
         new(Hal.config["brain"]).learn(text)
-      end
-      
-      def feed(response)
-        new(Hal.config["brain"]).feed(response)
       end
     end
   end
