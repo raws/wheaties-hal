@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+commands = Dir[File.dirname(__FILE__) + "/hal-*"].map { |filename| filename[/-(.*)/, 1] }.sort
+command = ARGV[0]
+
+if commands.include?(command)
+  exec(File.dirname(__FILE__) + "/hal-#{command}", *ARGV[1..-1])
+else
+  $stderr.puts "usage: hal <#{commands.join(" | ")}> ..."
+  exit 1
+end

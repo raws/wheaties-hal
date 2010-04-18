@@ -1,5 +1,6 @@
 $:.unshift(File.join(__FILE__, "../lib"))
 
+require "rubygems"
 require "httparty"
 
 require "hal/responses/messages"

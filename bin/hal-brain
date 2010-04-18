@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+
+require "rubygems"
+require "httparty"
+
+$:.unshift(File.join(__FILE__, "../../lib"))
+require "hal/brain"
+
+def confirm(prompt)
+  $stderr.print("#{prompt.gsub(/\s*$/, "")} [Yn] ")
+  $stdin.gets.chomp == "Y"
+end
+
+def forget(name)
+  return unless confirm("Are you sure you wish to remove #{name}?")
+  return unless confirm("Are you ABSOLUTELY sure you wish to completely remove #{name}? This cannot be undone!")
+  
+  response = Hal::Brain.new(name).delete!
+  
+  if response.code == 200
+    $stderr.puts "Removed #{name}"
+  else
+    $stderr.puts "An error occurred: response code #{response.code} from server"
+  end
+end
+
+command = ARGV[0]
+
+if command == "list"
+  Hal::Brain.list.each { |name| $stderr.puts name }
+elsif command == "forget" && name = ARGV[1]
+  forget(name)
+else
+  $stderr.puts "usage: hal brain list"
+  $stderr.puts "       hal brain forget <name>"
+  exit 1
+end

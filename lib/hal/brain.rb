@@ -3,11 +3,10 @@ module Hal
     include HTTParty
     base_uri "http://hal.blolol.com/brains"
     
-    attr_reader :name, :connection
+    attr_reader :name
     
     def initialize(name)
       @name = name
-      @connection = Wheaties::Connection.instance
     end
     
     def speak
@@ -19,7 +18,7 @@ module Hal
     end
     
     def delete!
-      self.class.delete("/#{name}.txt")
+      self.class.delete("/#{name}")
     end
     
     class << self
@@ -29,6 +28,10 @@ module Hal
       
       def learn(text)
         new(Hal.config["brain"]).learn(text)
+      end
+      
+      def list
+        get(".txt").split("\n")
       end
     end
   end
